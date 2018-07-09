@@ -19,6 +19,6 @@ fi
 for i in $name
 do
     echo ssh\'ing to $i 
-    ssh heat-admin@$(nova list 2>/dev/null | grep $i | grep -o "192.168[^ ]*") $@
+    ssh -o StrictHostKeyChecking=no  heat-admin@$(nova list 2>/dev/null | grep $i | grep -o "192.168[^ ]*") $@
 done
 
