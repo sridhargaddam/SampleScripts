@@ -7,6 +7,6 @@ do
   node=$(echo $i | awk -F 'ctlplane=' '{print $1}')
   ip=$(echo $i | awk -F 'ctlplane=' '{print $2}')
   echo $node $ip
-  echo "alias $node='ssh heat-admin@$ip'" >> nodesrc
+  echo "alias $node='ssh -o StrictHostKeyChecking=no heat-admin@$ip'" >> nodesrc
 done
 source nodesrc
