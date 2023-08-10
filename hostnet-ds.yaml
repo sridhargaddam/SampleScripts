@@ -1,0 +1,42 @@
+# @sridhargaddam
+# this script spawns a daemonSet pod in a k8s cluster which can be used for troubleshooting
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: host-net-pod
+  namespace: submariner-operator
+spec:
+  selector:
+    matchLabels:
+      app: host-net-pod
+  template:
+    metadata:
+      labels:
+        app: host-net-pod
+    spec:
+      tolerations:
+      - operator: Exists  
+      containers:
+        - name: host-net-pod
+          #image: nicolaka/netshoot
+          image: quay.io/sridhargaddam/netshoot:latest
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: true
+            capabilities:
+              add:
+              - net_admin
+              drop:
+              - all
+            privileged: true
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          command: ["/bin/sh", "-c"]
+          args:
+            - sleep infinity
+      restartPolicy: Always
+      securityContext: {}
+      serviceAccount: submariner-routeagent
+      serviceAccountName: submariner-routeagent
+      hostNetwork: true
